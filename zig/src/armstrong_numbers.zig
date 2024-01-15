@@ -4,11 +4,16 @@ pub fn isArmstrongNumber(num: u128) bool {
     if (num == 0) {
         return true;
     }
-    // this is a horrible amalgamation to just get the number of digits in `num` as a `usize`
-    const digits: usize = @as(usize, @truncate(@as(u128, @intFromFloat(@ceil(@log10(@as(f128, @floatFromInt(num))))))));
+
+    const digits: usize = blk: {
+        var digits = std.math.log10_int(num);
+        const is_pow10 = num - std.math.pow(u128, 10, digits) == 0;
+        digits += @intFromBool(!is_pow10);
+        break :blk digits;
+    };
+
     var sum: u128 = 0;
     var n = num;
-    // `truncate` is safe as `digits <= log_10(2^128) < 39`
     for (0..digits) |_| {
         sum += std.math.powi(u128, n % 10, digits) catch unreachable;
         n /= 10;
