@@ -1,5 +1,4 @@
 const std = @import("std");
-
 const testing = std.testing;
 const resistor_color = @import("../src/resistor_color.zig");
 const ColorBand = resistor_color.ColorBand;
